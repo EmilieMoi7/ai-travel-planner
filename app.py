@@ -49,6 +49,19 @@ class HotelRequest(BaseModel):
     total_of_special_requests: int
 
 
+class FlightRequest(BaseModel):
+    airline: int
+    flight: int
+    source_city: int
+    departure_time: int
+    stops: int
+    arrival_time: int
+    destination_city: int
+    travel_class: int
+    duration: float
+    days_left: int
+
+
 @app.post("/predict-hotel")
 def predict_hotel(data: HotelRequest):
     input_data = data.model_dump()
@@ -80,8 +93,45 @@ def predict_hotel(data: HotelRequest):
     df = pd.DataFrame([input_data], columns=columns)
 
     prediction = hotel_model.predict(df)[0]
+    probability = hotel_model.predict_proba(df)[0][1]
+
+    analysis = (
+        "Risque élevé d'annulation"
+        if prediction == 1
+        else "Risque faible d'annulation"
+    )
 
     return {
+        "reservation_analysis": analysis,
         "prediction": int(prediction),
-        "result": "Réservation annulée" if prediction == 1 else "Réservation maintenue"
+        "cancellation_probability": round(float(probability), 3)
+    }
+
+
+@app.post("/predict-flight")
+def predict_flight(data: FlightRequest):
+    input_data = data.model_dump()
+
+    input_data["class"] = input_data.pop("travel_class")
+
+    columns = [
+        "airline",
+        "flight",
+        "source_city",
+        "departure_time",
+        "stops",
+        "arrival_time",
+        "destination_city",
+        "class",
+        "duration",
+        "days_left"
+    ]
+
+    df = pd.DataFrame([input_data], columns=columns)
+
+    prediction = flight_model.predict(df)[0]
+
+    return {
+        "predicted_price": round(float(prediction), 2),
+        "currency": "INR"
     }
