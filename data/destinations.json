@@ -1,0 +1,44 @@
+[
+  {
+    "destination": "Bangalore",
+    "climate": "temperate",
+    "styles": ["city", "nature", "relaxation"],
+    "activities": ["food", "nature", "technology"],
+    "daily_cost": 4000
+  },
+  {
+    "destination": "Chennai",
+    "climate": "warm",
+    "styles": ["culture", "relaxation"],
+    "activities": ["beach", "food", "culture"],
+    "daily_cost": 3200
+  },
+  {
+    "destination": "Delhi",
+    "climate": "temperate",
+    "styles": ["culture", "city", "discovery"],
+    "activities": ["history", "food", "culture"],
+    "daily_cost": 3800
+  },
+  {
+    "destination": "Hyderabad",
+    "climate": "warm",
+    "styles": ["culture", "city"],
+    "activities": ["food", "history", "culture"],
+    "daily_cost": 3300
+  },
+  {
+    "destination": "Kolkata",
+    "climate": "warm",
+    "styles": ["culture", "discovery"],
+    "activities": ["food", "history", "culture"],
+    "daily_cost": 3000
+  },
+  {
+    "destination": "Mumbai",
+    "climate": "warm",
+    "styles": ["city", "nightlife", "discovery"],
+    "activities": ["food", "nightlife", "beach"],
+    "daily_cost": 5000
+  }
+]
