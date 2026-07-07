@@ -6,6 +6,7 @@ import joblib
 import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
+from huggingface_hub import hf_hub_download 
 
 
 # Chemins robustes, indépendants du dossier depuis lequel uvicorn est lancé
@@ -24,13 +25,48 @@ app = FastAPI(
 )
 
 
+# Dépôt Hugging Face contenant les modèles et les encodeurs
+REPO_ID = "Emilie7/ai-travel-planner-models"
+
+
+def get_model_path(filename: str) -> Path:
+    """
+    Utilise le fichier local s'il existe.
+    Sinon, le télécharge depuis Hugging Face.
+    """
+    local_path = MODELS_DIR / filename
+
+    if local_path.exists():
+        print(f"Chargement local : {filename}")
+        return local_path
+
+    print(f"Téléchargement depuis Hugging Face : {filename}")
+
+    downloaded_path = hf_hub_download(
+        repo_id=REPO_ID,
+        filename=filename
+    )
+
+    return Path(downloaded_path)
+
+
 # Chargement des modèles
-hotel_model = joblib.load(MODELS_DIR / "hotel_model.pkl")
-flight_model = joblib.load(MODELS_DIR / "flight_model.pkl")
+hotel_model = joblib.load(
+    get_model_path("hotel_model.pkl")
+)
+
+flight_model = joblib.load(
+    get_model_path("flight_model.pkl")
+)
 
 # Chargement des encodeurs
-hotel_encoders = joblib.load(MODELS_DIR / "hotel_encoders.pkl")
-flight_encoders = joblib.load(MODELS_DIR / "flight_encoders.pkl")
+hotel_encoders = joblib.load(
+    get_model_path("hotel_encoders.pkl")
+)
+
+flight_encoders = joblib.load(
+    get_model_path("flight_encoders.pkl")
+)
 
 
 with open(
@@ -293,6 +329,7 @@ def predict_flight(data: FlightRequest):
         "currency": "INR"
     }
 
+
 @app.post("/budget")
 def estimate_budget(data: BudgetRequest):
     flight_total = (
@@ -338,6 +375,7 @@ def estimate_budget(data: BudgetRequest):
             "contingency": round(contingency_amount, 2)
         }
     }
+
 
 @app.post("/recommendation")
 def recommend_destination(data: RecommendationRequest):
