@@ -37,3 +37,6 @@ jobs:
 
       - name: Validate destinations JSON
         run: python -m json.tool data/destinations.json > /dev/null
+
+      - name: Run API tests
+        run: pytest -v  
