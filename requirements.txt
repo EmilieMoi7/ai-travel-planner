@@ -143,4 +143,4 @@ xgboost==3.3.0
 huggingface_hub
 pytest
 httpx
-gradio==X.Y.Z
+gradio==6.20.0
