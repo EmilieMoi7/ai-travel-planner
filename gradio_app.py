@@ -732,3 +732,6 @@ app = gr.mount_gradio_app(
     demo,
     path="/gradio",
 )
+
+if __name__ == "__main__":
+    demo.launch()

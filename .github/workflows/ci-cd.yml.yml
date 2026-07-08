@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD
 
 on:
   push:
@@ -33,10 +33,31 @@ jobs:
           pip check
 
       - name: Check Python syntax
-        run: python -m compileall -q app.py
+        run: python -m compileall -q app.py gradio_app.py
 
       - name: Validate destinations JSON
         run: python -m json.tool data/destinations.json > /dev/null
 
       - name: Run API tests
-        run: pytest -v  
+        run: pytest -v
+
+  deploy:
+    name: Deploy to Hugging Face
+    needs: checks
+
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Sync repository to Hugging Face
+        uses: huggingface/hub-sync@v0.1.0
+        with:
+          github_repo_id: ${{ github.repository }}
+          huggingface_repo_id: Emilie7/ai-travel-planner
+          hf_token: ${{ secrets.HF_TOKEN }}
+          repo_type: space
+          space_sdk: gradio
