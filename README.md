@@ -1,7 +1,7 @@
 ---
 title: AI Travel Planner
 emoji: ✈️
-colorFrom: orange
+colorFrom: red
 colorTo: blue
 sdk: gradio
 sdk_version: 6.20.0
