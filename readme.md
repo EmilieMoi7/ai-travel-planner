@@ -6,7 +6,7 @@ colorTo: blue
 sdk: gradio
 sdk_version: 6.20.0
 python_version: 3.13
-app_file: gradio_app.py
+app_file: space_app.py
 models:
   - Emilie7/ai-travel-planner-models
 pinned: false
